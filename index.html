@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+(function () {
+  try {
+    var s = localStorage.getItem("dm-labs-theme");
+    document.documentElement.setAttribute("data-theme", s === "dark" ? "dark" : "light");
+  } catch (e) {
+    document.documentElement.setAttribute("data-theme", "light");
+  }
+  try {
+    var l = localStorage.getItem("dm-labs-lang");
+    if (l === "en" || l === "pt") document.documentElement.lang = l;
+  } catch (e) {}
+})();
+
+  </script>
+  <title>MozStat · Daniel Marcos Labs</title>
+  <meta name="description" content="Indicadores ao vivo de Moçambique (World Bank, REST Countries, Open-Meteo). A Daniel Marcos lab." />
+  <style>
+:root {
+  --bg: #F7F8FA;
+  --text: #0F172A;
+  --muted: #64748B;
+  --accent: #0F766E;
+  --accent-hover: #0D9488;
+  --accent-dim: rgba(15, 118, 110, 0.14);
+  --card: #FFFFFF;
+  --line: rgba(15, 23, 42, 0.10);
+  --input: #FFFFFF;
+  --shadow: 0 10px 32px rgba(15, 23, 42, 0.06);
+  --ok: #15803D;
+  --danger: #DC2626;
+  --header-wash: rgba(15, 118, 110, 0.07);
+  --board-empty: #F1F5F9;
+}
+html { color-scheme: light; }
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0B1220;
+  --text: #E8EEF7;
+  --muted: #9AA8BC;
+  --accent: #D4AF37;
+  --accent-hover: #E8C547;
+  --accent-dim: rgba(212, 175, 55, 0.16);
+  --card: #121A2B;
+  --line: rgba(232, 238, 247, 0.08);
+  --input: #0B1220;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --ok: #6FCF97;
+  --danger: #E26D7A;
+  --header-wash: rgba(212, 175, 55, 0.06);
+  --board-empty: #0E1628;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.site-header, .site-footer { padding: 1rem 1.25rem; }
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--header-wash), transparent);
+  flex-wrap: wrap;
+}
+.brand { font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
+.brand:hover { color: var(--accent); text-decoration: none; }
+.brand span { color: var(--accent); }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.lang-toggle {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--card);
+}
+.lang-toggle button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 0.35rem 0.65rem;
+  font: 700 0.75rem/1 system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.lang-toggle button[aria-pressed="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+html[data-theme="dark"] .lang-toggle button[aria-pressed="true"] { color: #0B1220; }
+.icon-btn {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.gh-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+}
+.gh-link:hover { color: var(--accent); border-color: var(--accent); text-decoration: none; }
+main { width: min(960px, calc(100% - 2rem)); margin: 1.25rem auto 2rem; flex: 1; }
+h1 { font-size: 1.55rem; margin: 0 0 0.35rem; letter-spacing: -0.02em; }
+.lead { color: var(--muted); margin: 0 0 1.1rem; line-height: 1.5; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.85rem;
+  box-shadow: var(--shadow);
+}
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  padding: 0.55rem 0.95rem;
+}
+.btn:hover { border-color: var(--accent); }
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
+}
+.btn-accent:hover { filter: brightness(1.06); }
+html[data-theme="dark"] .btn-accent { color: #0B1220; }
+.btn-ghost { background: transparent; color: var(--text); }
+.btn[aria-pressed="true"] {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+.site-footer {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.88rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.85rem;
+}
+.muted { color: var(--muted); }
+.ok { color: var(--ok); }
+.danger { color: var(--danger); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+input, select, textarea {
+  font: inherit;
+  background: var(--input);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+  outline: none;
+}
+.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+@media (max-width: 640px) {
+  .site-header { align-items: flex-start; }
+}
+
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+    }
+    .stat .k {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+    .stat .v { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+    .stat .s { font-size: 0.82rem; color: var(--muted); margin-top: 0.25rem; }
+    .flag {
+      width: 100%;
+      max-width: 280px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      display: block;
+    }
+    .skel {
+      height: 1.2em;
+      width: 60%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--line), transparent, var(--line));
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes pulse { 50% { opacity: 0.45; } }
+    .banner {
+      padding: 0.65rem 0.8rem;
+      border-radius: 10px;
+      margin-bottom: 0.85rem;
+      border: 1px solid var(--line);
+      font-size: 0.92rem;
+    }
+    .banner.err { border-color: var(--danger); color: var(--danger); }
+    .disclaimer { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+    .reload { margin-bottom: 0.85rem; }
+
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="https://danielpro.dev">Daniel Marcos <span>· Labs</span></a>
+    <div class="header-right">
+      <span class="muted" style="font-size:0.85rem" data-i18n="tag"></span>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="icon-btn" id="theme-toggle" aria-label="Modo escuro"></button>
+      <a class="gh-link" href="https://github.com/danielcodemoz/mozstat">GitHub</a>
+    </div>
+  </header>
+  <main>
+
+    <h1 data-i18n="title">MozStat</h1>
+    <p class="lead" data-i18n="lead">Indicadores ao vivo de Moçambique: população, capital, PIB, esperança de vida e meteorologia em Maputo.</p>
+    <button type="button" class="btn btn-accent reload" id="reload" data-i18n="reload">Actualizar dados</button>
+    <div id="banners"></div>
+    <div class="grid" id="grid"></div>
+    <p class="disclaimer" data-i18n-html="disclaimer"></p>
+
+  </main>
+  <footer class="site-footer">
+    <span>Daniel Marcos · Labs</span>
+    <span>·</span>
+    <a href="https://danielpro.dev">danielpro.dev</a>
+    <span>·</span>
+    <a href="https://github.com/danielcodemoz/mozstat" data-i18n="code">Código</a>
+    <span>·</span>
+    <span data-i18n="labnote">Laboratório, não um produto de produção.</span>
+  </footer>
+  <script>
+(function () {
+  var KEY = "dm-labs-theme";
+  var btn = document.getElementById("theme-toggle");
+  var SUN = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
+  var MOON = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"/></svg>';
+  function isDark() { return document.documentElement.getAttribute("data-theme") === "dark"; }
+  function paint() {
+    if (!btn) return;
+    btn.innerHTML = isDark() ? SUN : MOON;
+    var en = (document.documentElement.lang || "pt") === "en";
+    btn.setAttribute("aria-label", isDark() ? (en ? "Light mode" : "Modo claro") : (en ? "Dark mode" : "Modo escuro"));
+  }
+  window.__dmPaintTheme = paint;
+  paint();
+  if (btn) btn.addEventListener("click", function () {
+    var next = isDark() ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+    paint();
+  });
+})();
+
+function dmGetLang() {
+  try {
+    var l = localStorage.getItem("dm-labs-lang");
+    if (l === "en" || l === "pt") return l;
+  } catch (e) {}
+  return "pt";
+}
+function dmSetLang(l) {
+  try { localStorage.setItem("dm-labs-lang", l); } catch (e) {}
+  document.documentElement.lang = l;
+  document.querySelectorAll(".lang-toggle button").forEach(function (b) {
+    b.setAttribute("aria-pressed", b.getAttribute("data-lang") === l ? "true" : "false");
+  });
+  var dict = (window.I18N && window.I18N[l]) || {};
+  document.querySelectorAll("[data-i18n]").forEach(function (el) {
+    var k = el.getAttribute("data-i18n");
+    if (dict[k] != null) el.textContent = dict[k];
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
+    var k = el.getAttribute("data-i18n-html");
+    if (dict[k] != null) el.innerHTML = dict[k];
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+    var k = el.getAttribute("data-i18n-placeholder");
+    if (dict[k] != null) el.setAttribute("placeholder", dict[k]);
+  });
+  document.querySelectorAll("[data-i18n-aria]").forEach(function (el) {
+    var k = el.getAttribute("data-i18n-aria");
+    if (dict[k] != null) el.setAttribute("aria-label", dict[k]);
+  });
+  if (window.__dmPaintTheme) window.__dmPaintTheme();
+  if (window.onLangChange) window.onLangChange(l);
+}
+document.querySelectorAll(".lang-toggle button").forEach(function (b) {
+  b.addEventListener("click", function () { dmSetLang(b.getAttribute("data-lang")); });
+});
+
+
+window.I18N = {
+  pt: {
+    tag: "MozStat",
+    code: "Código",
+    labnote: "Laboratório, não um produto de produção.",
+    title: "MozStat",
+    lead: "Indicadores ao vivo de Moçambique: população, capital, PIB, esperança de vida e meteorologia em Maputo.",
+    reload: "Actualizar dados",
+    loading: "A carregar…",
+    error: "Não foi possível carregar alguns dados. Tenta outra vez.",
+    pop: "População",
+    capital: "Capital",
+    area: "Área",
+    gdp: "PIB",
+    life: "Esperança de vida",
+    weather: "Meteorologia · Maputo",
+    flag: "Bandeira",
+    languages: "Línguas",
+    currency: "Moeda",
+    sourceWB: "Banco Mundial",
+    sourceRC: "REST Countries",
+    sourceOM: "Open-Meteo",
+    humidity: "Humidade",
+    wind: "Vento",
+    year: "ano",
+    km2: "km²",
+    usd: "USD",
+    years: "anos",
+    disclaimer: "Fontes: <a href=\"https://data.worldbank.org/\" rel=\"noopener\">World Bank</a>, <a href=\"https://restcountries.com/\" rel=\"noopener\">REST Countries</a> e <a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a>. Laboratório, não um produto oficial.",
+    w0: "Céu limpo", w1: "Principalmente limpo", w2: "Parcialmente nublado", w3: "Nublado",
+    w45: "Nevoeiro", w48: "Nevoeiro com geada", w51: "Chuvisco fraco", w61: "Chuva fraca",
+    w63: "Chuva", w65: "Chuva forte", w71: "Neve", w80: "Aguaceiros", w95: "Trovoada"
+  },
+  en: {
+    tag: "MozStat",
+    code: "Code",
+    labnote: "This is a lab, not a production product.",
+    title: "MozStat",
+    lead: "Live Mozambique indicators: population, capital, GDP, life expectancy, and Maputo weather.",
+    reload: "Refresh data",
+    loading: "Loading…",
+    error: "Could not load some data. Try again.",
+    pop: "Population",
+    capital: "Capital",
+    area: "Area",
+    gdp: "GDP",
+    life: "Life expectancy",
+    weather: "Weather · Maputo",
+    flag: "Flag",
+    languages: "Languages",
+    currency: "Currency",
+    sourceWB: "World Bank",
+    sourceRC: "REST Countries",
+    sourceOM: "Open-Meteo",
+    humidity: "Humidity",
+    wind: "Wind",
+    year: "year",
+    km2: "km²",
+    usd: "USD",
+    years: "years",
+    disclaimer: "Sources: <a href=\"https://data.worldbank.org/\" rel=\"noopener\">World Bank</a>, <a href=\"https://restcountries.com/\" rel=\"noopener\">REST Countries</a> and <a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a>. A lab, not an official product.",
+    w0: "Clear sky", w1: "Mainly clear", w2: "Partly cloudy", w3: "Overcast",
+    w45: "Fog", w48: "Rime fog", w51: "Light drizzle", w61: "Light rain",
+    w63: "Rain", w65: "Heavy rain", w71: "Snow", w80: "Showers", w95: "Thunderstorm"
+  }
+};
+
+(function () {
+  function t(k) {
+    var l = dmGetLang();
+    return (I18N[l] && I18N[l][k]) || I18N.pt[k] || k;
+  }
+  function locale() { return dmGetLang() === "en" ? "en-GB" : "pt-MZ"; }
+  function num(n, maxFrac) {
+    if (n == null || !isFinite(n)) return "—";
+    return new Intl.NumberFormat(locale(), { maximumFractionDigits: maxFrac || 0 }).format(n);
+  }
+  function wbLatest(json) {
+    var rows = json && json[1];
+    if (!rows) return null;
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i] && rows[i].value != null) return { value: rows[i].value, date: rows[i].date };
+    }
+    return null;
+  }
+  function weatherText(code) {
+    var map = {0:"w0",1:"w1",2:"w2",3:"w3",45:"w45",48:"w48",51:"w51",53:"w51",55:"w51",61:"w61",63:"w63",65:"w65",71:"w71",80:"w80",81:"w80",82:"w80",95:"w95",96:"w95",99:"w95"};
+    return t(map[code] || "w2");
+  }
+  var state = { loading: true, rc: null, pop: null, gdp: null, life: null, wx: null, errors: [] };
+
+  function card(key, valueHtml, sub, extra) {
+    return '<article class="card stat"><div class="k">' + t(key) + '</div><div class="v">' +
+      (state.loading ? '<div class="skel"></div>' : valueHtml) + '</div>' +
+      (sub ? '<div class="s">' + sub + '</div>' : '') + (extra || "") + "</article>";
+  }
+
+  function render() {
+    var banners = document.getElementById("banners");
+    banners.innerHTML = "";
+    if (state.loading) {
+      banners.innerHTML = '<div class="banner">' + t("loading") + "</div>";
+    } else if (state.errors.length) {
+      banners.innerHTML = '<div class="banner err">' + t("error") + "</div>";
+    }
+    var g = document.getElementById("grid");
+    var popV = state.pop ? num(state.pop.value) : "—";
+    var popS = state.pop ? t("sourceWB") + " · " + state.pop.date : t("sourceWB");
+    var cap = (state.rc && state.rc.capital && state.rc.capital[0]) || "—";
+    var area = state.rc ? num(state.rc.area) + " " + t("km2") : "—";
+    var langs = state.rc && state.rc.languages ? Object.values(state.rc.languages).join(", ") : "—";
+    var cur = "—";
+    if (state.rc && state.rc.currencies) {
+      cur = Object.keys(state.rc.currencies).map(function (c) {
+        var x = state.rc.currencies[c];
+        return (x.symbol ? x.symbol + " " : "") + x.name + " (" + c + ")";
+      }).join(", ");
+    }
+    var gdpV = state.gdp ? num(state.gdp.value / 1e9, 1) + " mil milhões " + t("usd") : "—";
+    if (dmGetLang() === "en" && state.gdp) gdpV = num(state.gdp.value / 1e9, 1) + " billion " + t("usd");
+    var gdpS = state.gdp ? t("sourceWB") + " · " + state.gdp.date : t("sourceWB");
+    var lifeV = state.life ? num(state.life.value, 1) + " " + t("years") : "—";
+    var lifeS = state.life ? t("sourceWB") + " · " + state.life.date : t("sourceWB");
+    var wxV = "—", wxS = t("sourceOM");
+    if (state.wx && state.wx.current) {
+      var c = state.wx.current;
+      wxV = num(c.temperature_2m, 1) + " °C · " + weatherText(c.weather_code);
+      wxS = t("humidity") + " " + c.relative_humidity_2m + "% · " + t("wind") + " " + num(c.wind_speed_10m, 0) + " km/h · " + t("sourceOM");
+    }
+    var flag = "";
+    if (state.rc && state.rc.flags && state.rc.flags.svg) {
+      flag = '<img class="flag" alt="' + t("flag") + '" src="' + state.rc.flags.svg + '" />';
+    }
+    g.innerHTML =
+      card("pop", popV, popS) +
+      card("capital", cap, t("sourceRC") + " · " + t("languages") + ": " + langs) +
+      card("area", area, t("sourceRC") + " · " + t("currency") + ": " + cur) +
+      card("gdp", gdpV, gdpS) +
+      card("life", lifeV, lifeS) +
+      card("weather", wxV, wxS) +
+      card("flag", flag || "—", t("sourceRC"));
+  }
+
+  async function load() {
+    state.loading = true;
+    state.errors = [];
+    render();
+    function fail(label) { state.errors.push(label); return null; }
+    const wb = function (code) {
+      return fetch("https://api.worldbank.org/v2/country/MOZ/indicator/" + code + "?format=json&per_page=8")
+        .then(function (r) { if (!r.ok) throw new Error("wb"); return r.json(); })
+        .then(wbLatest)
+        .catch(function () { return fail(code); });
+    };
+    const jobs = [
+      fetch("https://restcountries.com/v3.1/alpha/moz")
+        .then(function (r) { if (!r.ok) throw new Error("rc"); return r.json(); })
+        .then(function (j) { return j[0]; })
+        .catch(function () { return fail("rc"); }),
+      wb("SP.POP.TOTL"),
+      wb("NY.GDP.MKTP.CD"),
+      wb("SP.DYN.LE00.IN"),
+      fetch("https://api.open-meteo.com/v1/forecast?latitude=-25.97&longitude=32.59&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Africa%2FMaputo")
+        .then(function (r) { if (!r.ok) throw new Error("wx"); return r.json(); })
+        .catch(function () { return fail("wx"); })
+    ];
+    const out = await Promise.all(jobs);
+    state.rc = out[0];
+    state.pop = out[1];
+    state.gdp = out[2];
+    state.life = out[3];
+    state.wx = out[4];
+    state.loading = false;
+    render();
+  }
+
+  window.onLangChange = function () { render(); };
+  document.getElementById("reload").addEventListener("click", load);
+  load();
+})();
+
+    dmSetLang(dmGetLang());
+  </script>
+</body>
+</html>
