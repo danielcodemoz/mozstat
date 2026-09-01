@@ -358,7 +358,7 @@ window.I18N = {
     languages: "Línguas",
     currency: "Moeda",
     sourceWB: "Banco Mundial",
-    sourceRC: "REST Countries",
+    sourceRC: "Referência",
     sourceOM: "Open-Meteo",
     humidity: "Humidade",
     wind: "Vento",
@@ -366,7 +366,7 @@ window.I18N = {
     km2: "km²",
     usd: "USD",
     years: "anos",
-    disclaimer: "Fontes: <a href=\"https://data.worldbank.org/\" rel=\"noopener\">World Bank</a>, <a href=\"https://restcountries.com/\" rel=\"noopener\">REST Countries</a> e <a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a>. Laboratório, não um produto oficial.",
+    disclaimer: "Fontes ao vivo: <a href=\"https://data.worldbank.org/\" rel=\"noopener\">World Bank</a> (população, PIB, esperança de vida) e <a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a> (Maputo). Capital, área e bandeira são dados de referência — a API REST Countries foi descontinuada. Laboratório, não um produto oficial.",
     w0: "Céu limpo", w1: "Principalmente limpo", w2: "Parcialmente nublado", w3: "Nublado",
     w45: "Nevoeiro", w48: "Nevoeiro com geada", w51: "Chuvisco fraco", w61: "Chuva fraca",
     w63: "Chuva", w65: "Chuva forte", w71: "Neve", w80: "Aguaceiros", w95: "Trovoada"
@@ -391,7 +391,7 @@ window.I18N = {
     languages: "Languages",
     currency: "Currency",
     sourceWB: "World Bank",
-    sourceRC: "REST Countries",
+    sourceRC: "Referência",
     sourceOM: "Open-Meteo",
     humidity: "Humidity",
     wind: "Wind",
@@ -399,7 +399,7 @@ window.I18N = {
     km2: "km²",
     usd: "USD",
     years: "years",
-    disclaimer: "Sources: <a href=\"https://data.worldbank.org/\" rel=\"noopener\">World Bank</a>, <a href=\"https://restcountries.com/\" rel=\"noopener\">REST Countries</a> and <a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a>. A lab, not an official product.",
+    disclaimer: "Live sources: <a href=\"https://data.worldbank.org/\" rel=\"noopener\">World Bank</a> (population, GDP, life expectancy) and <a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a> (Maputo). Capital, area and flag are reference data — the REST Countries API was discontinued. A lab, not an official product.",
     w0: "Clear sky", w1: "Mainly clear", w2: "Partly cloudy", w3: "Overcast",
     w45: "Fog", w48: "Rime fog", w51: "Light drizzle", w61: "Light rain",
     w63: "Rain", w65: "Heavy rain", w71: "Snow", w80: "Showers", w95: "Thunderstorm"
@@ -480,7 +480,7 @@ window.I18N = {
   }
   function fetchJson(url, timeoutMs) {
     var ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
-    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, timeoutMs || 5000);
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, timeoutMs || 12000);
     var opts = { method: "GET", mode: "cors" };
     if (ctrl) opts.signal = ctrl.signal;
     return fetch(url, opts).then(function (r) {
@@ -570,7 +570,7 @@ window.I18N = {
       var urls = [
         "https://api.worldbank.org/v2/country/MOZ/indicator/" + code + "?format=json&mrnev=1&per_page=8",
         "https://api.worldbank.org/v2/country/MOZ/indicator/" + code + "?format=json&per_page=20"
-      ].concat(corsFallbacks("https://api.worldbank.org/v2/country/MOZ/indicator/" + code + "?format=json&mrnev=1&per_page=8").slice(1));
+      ];
       return urls.reduce(function (p, u) {
         return p.catch(function () {
           return fetchJson(u).then(wbLatest).then(function (row) {
@@ -580,17 +580,17 @@ window.I18N = {
         });
       }, Promise.reject(new Error("start"))).catch(function () { return fail(code); });
     }
+    function staticMoz() {
+      return {
+        capital: ["Maputo"],
+        area: 801590,
+        languages: { por: "Português" },
+        currencies: { MZN: { name: "Metical moçambicano", symbol: "MT" } },
+        flags: { svg: "https://flagcdn.com/mz.svg", png: "https://flagcdn.com/w320/mz.png" }
+      };
+    }
     function fetchRc() {
-      var urls = [
-        "https://restcountries.conventus.de/v3.1/alpha/MOZ",
-        "https://restcountries.com/v3.1/alpha/MOZ",
-        "https://countries.dev/alpha/MOZ"
-      ].concat(corsFallbacks("https://restcountries.conventus.de/v3.1/alpha/MOZ").slice(1));
-      return urls.reduce(function (p, u) {
-        return p.catch(function () {
-          return fetchJson(u).then(parseRc).then(normalizeRc);
-        });
-      }, Promise.reject(new Error("start")));
+      return Promise.resolve(staticMoz());
     }
     var wxUrl = "https://api.open-meteo.com/v1/forecast?latitude=-25.97&longitude=32.57&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Africa%2FMaputo";
     const jobs = [
@@ -598,14 +598,10 @@ window.I18N = {
       wb("SP.POP.TOTL"),
       wb("NY.GDP.MKTP.CD"),
       wb("SP.DYN.LE00.IN"),
-      corsFallbacks(wxUrl).reduce(function (p, u) {
-        return p.catch(function () {
-          return fetchJson(u).then(function (j) {
-            if (!j || !j.current) throw new Error("wx shape");
-            return j;
-          });
-        });
-      }, Promise.reject(new Error("start"))).catch(function () { return fail("wx"); })
+      fetchJson(wxUrl, 12000).then(function (j) {
+        if (!j || !j.current) throw new Error("wx shape");
+        return j;
+      }).catch(function () { return fail("wx"); })
     ];
     const out = await Promise.all(jobs);
     state.rc = out[0];
