@@ -1,11 +1,19 @@
 # MozStat
 
-Painel de indicadores ao vivo de Moçambique (população, capital, PIB, esperança de vida, meteorologia em Maputo). Live Mozambique stats dashboard from World Bank, REST Countries and Open-Meteo.
+Painel de indicadores ao vivo de Moçambique (população, capital, PIB, esperança de vida, meteorologia em Maputo), com dados de World Bank, REST Countries e Open-Meteo.
 
-**Ao vivo / Live:** https://danielcodemoz.github.io/mozstat/
+**Demo:** https://danielcodemoz.github.io/mozstat/
 
-Portfólio: https://danielpro.dev
+## Stack
 
-Isto é um laboratório, não um produto de produção. This is a lab, not a production product.
+- HTML, CSS e JavaScript (`index.html`)
 
-Fontes / Sources: World Bank, REST Countries, Open-Meteo.
+## Correr localmente
+
+Abre `index.html` no browser.
+
+## Autor
+
+Daniel Marcos — consultor de TI em Maputo. Lab público, não é produto de cliente.
+
+https://danielpro.dev
