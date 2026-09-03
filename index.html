@@ -16,10 +16,9 @@
     if (l === "en" || l === "pt") document.documentElement.lang = l;
   } catch (e) {}
 })();
-
   </script>
   <title>MozStat · Daniel Marcos Labs</title>
-  <meta name="description" content="Indicadores ao vivo de Moçambique (World Bank, REST Countries, Open-Meteo). A Daniel Marcos lab." />
+  <meta name="description" content="Indicadores ao vivo de Moçambique (World Bank, REST Countries, Open-Meteo). Um laboratório de Daniel Marcos." />
   <style>
 :root {
   --bg: #F7F8FA;
@@ -36,6 +35,7 @@
   --danger: #DC2626;
   --header-wash: rgba(15, 118, 110, 0.07);
   --board-empty: #F1F5F9;
+  --on-accent: #fff;
 }
 html { color-scheme: light; }
 html[data-theme="dark"] {
@@ -54,6 +54,7 @@ html[data-theme="dark"] {
   --danger: #E26D7A;
   --header-wash: rgba(212, 175, 55, 0.06);
   --board-empty: #0E1628;
+  --on-accent: #0B1220;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -80,12 +81,7 @@ a:hover { text-decoration: underline; }
 .brand { font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
 .brand:hover { color: var(--accent); text-decoration: none; }
 .brand span { color: var(--accent); }
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
+.header-right { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .lang-toggle {
   display: inline-flex;
   border: 1px solid var(--line);
@@ -132,17 +128,10 @@ html[data-theme="dark"] .lang-toggle button[aria-pressed="true"] { color: #0B122
   padding: 0.4rem 0.75rem;
 }
 .gh-link:hover { color: var(--accent); border-color: var(--accent); text-decoration: none; }
-main { width: min(960px, calc(100% - 2rem)); margin: 1.25rem auto 2rem; flex: 1; }
+main { width: min(1080px, calc(100% - 2rem)); margin: 1.25rem auto 2rem; flex: 1; }
 h1 { font-size: 1.55rem; margin: 0 0 0.35rem; letter-spacing: -0.02em; }
+h2 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 1.4rem 0 0.7rem; }
 .lead { color: var(--muted); margin: 0 0 1.1rem; line-height: 1.5; }
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 1rem 1.1rem;
-  margin-bottom: 0.85rem;
-  box-shadow: var(--shadow);
-}
 .btn {
   font: inherit;
   cursor: pointer;
@@ -155,19 +144,12 @@ h1 { font-size: 1.55rem; margin: 0 0 0.35rem; letter-spacing: -0.02em; }
 .btn:hover { border-color: var(--accent); }
 .btn-accent {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border-color: transparent;
   font-weight: 600;
 }
 .btn-accent:hover { filter: brightness(1.06); }
-html[data-theme="dark"] .btn-accent { color: #0B1220; }
-.btn-ghost { background: transparent; color: var(--text); }
-.btn[aria-pressed="true"] {
-  background: var(--accent-dim);
-  border-color: var(--accent);
-  color: var(--accent);
-  font-weight: 600;
-}
+.btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; font-weight: 650; }
 .site-footer {
   border-top: 1px solid var(--line);
   color: var(--muted);
@@ -179,69 +161,90 @@ html[data-theme="dark"] .btn-accent { color: #0B1220; }
 .muted { color: var(--muted); }
 .ok { color: var(--ok); }
 .danger { color: var(--danger); }
-button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+button:focus-visible, a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-input, select, textarea {
-  font: inherit;
-  background: var(--input);
-  color: var(--text);
-  border: 1px solid var(--line);
+.toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.85rem; }
+.banner {
+  padding: 0.65rem 0.8rem;
   border-radius: 10px;
-  padding: 0.55rem 0.75rem;
+  margin-bottom: 0.85rem;
+  border: 1px solid var(--line);
+  font-size: 0.92rem;
 }
-input:focus, select:focus, textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-dim);
-  outline: none;
+.banner.err { border-color: var(--danger); color: var(--danger); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
 }
-.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem 1.05rem 0.95rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: 9.2rem;
+}
+.kpi-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 0.45rem;
+}
+.kpi-value {
+  font-size: 1.7rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 auto;
+  word-break: break-word;
+}
+.kpi-value.small { font-size: 1.15rem; }
+.kpi-meta {
+  margin: 0.7rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.55rem;
+  align-items: center;
+}
+.kpi-meta time { font-variant-numeric: tabular-nums; }
+.flag {
+  width: 100%;
+  max-width: 220px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  display: block;
+}
+.skel {
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--line), transparent, var(--line));
+  background-size: 200% 100%;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.skel-label { height: 0.7rem; width: 42%; margin-bottom: 0.7rem; }
+.skel-value { height: 1.7rem; width: 68%; margin-bottom: auto; }
+.skel-meta { height: 0.7rem; width: 55%; margin-top: 0.8rem; }
+@keyframes pulse { 50% { opacity: 0.45; } }
+.sources {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-top: 1.4rem;
+}
+.sources ul { margin: 0.4rem 0 0; padding-left: 1.15rem; }
+.sources li { margin: 0.2rem 0; }
 @media (max-width: 640px) {
   .site-header { align-items: flex-start; }
+  .kpi-value { font-size: 1.45rem; }
 }
-
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 0.75rem;
-    }
-    .stat .k {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--muted);
-      margin-bottom: 0.25rem;
-    }
-    .stat .v { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
-    .stat .s { font-size: 0.82rem; color: var(--muted); margin-top: 0.25rem; }
-    .flag {
-      width: 100%;
-      max-width: 280px;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      display: block;
-    }
-    .skel {
-      height: 1.2em;
-      width: 60%;
-      border-radius: 6px;
-      background: linear-gradient(90deg, var(--line), transparent, var(--line));
-      animation: pulse 1.2s ease-in-out infinite;
-    }
-    @keyframes pulse { 50% { opacity: 0.45; } }
-    .banner {
-      padding: 0.65rem 0.8rem;
-      border-radius: 10px;
-      margin-bottom: 0.85rem;
-      border: 1px solid var(--line);
-      font-size: 0.92rem;
-    }
-    .banner.err { border-color: var(--danger); color: var(--danger); }
-    .disclaimer { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
-    .reload { margin-bottom: 0.85rem; }
-
   </style>
 </head>
 <body>
@@ -258,17 +261,20 @@ input:focus, select:focus, textarea:focus {
     </div>
   </header>
   <main>
-
     <h1 data-i18n="title">MozStat</h1>
-    <p class="lead" data-i18n="lead">Indicadores ao vivo de Moçambique: população, capital, PIB, esperança de vida e meteorologia em Maputo.</p>
-    <button type="button" class="btn btn-accent reload" id="reload" data-i18n="reload">Actualizar dados</button>
+    <p class="lead" data-i18n="lead"></p>
+    <div class="toolbar">
+      <button type="button" class="btn btn-accent" id="reload" data-i18n="reload">Actualizar dados</button>
+    </div>
     <div id="banners"></div>
-    <div class="grid" id="grid"></div>
-    <p class="disclaimer" data-i18n-html="disclaimer"></p>
-
+    <h2 data-i18n="secCountry">País</h2>
+    <div class="grid" id="grid-country"></div>
+    <h2 data-i18n="secWeather">Meteorologia</h2>
+    <div class="grid" id="grid-weather"></div>
+    <div class="sources" data-i18n-html="sources"></div>
   </main>
   <footer class="site-footer">
-    <span>Daniel Marcos · Labs</span>
+    <span>Daniel Marcos · Labs · Maputo</span>
     <span>·</span>
     <a href="https://danielpro.dev">danielpro.dev</a>
     <span>·</span>
@@ -321,14 +327,6 @@ function dmSetLang(l) {
     var k = el.getAttribute("data-i18n-html");
     if (dict[k] != null) el.innerHTML = dict[k];
   });
-  document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
-    var k = el.getAttribute("data-i18n-placeholder");
-    if (dict[k] != null) el.setAttribute("placeholder", dict[k]);
-  });
-  document.querySelectorAll("[data-i18n-aria]").forEach(function (el) {
-    var k = el.getAttribute("data-i18n-aria");
-    if (dict[k] != null) el.setAttribute("aria-label", dict[k]);
-  });
   if (window.__dmPaintTheme) window.__dmPaintTheme();
   if (window.onLangChange) window.onLangChange(l);
 }
@@ -336,37 +334,44 @@ document.querySelectorAll(".lang-toggle button").forEach(function (b) {
   b.addEventListener("click", function () { dmSetLang(b.getAttribute("data-lang")); });
 });
 
-
 window.I18N = {
   pt: {
     tag: "MozStat",
     code: "Código",
     labnote: "Laboratório, não um produto de produção.",
     title: "MozStat",
-    lead: "Indicadores ao vivo de Moçambique: população, capital, PIB, esperança de vida e meteorologia em Maputo.",
-    reload: "Actualizar dados",
-    loading: "A carregar…",
-    error: "Não foi possível carregar alguns dados. Tenta outra vez.",
+    lead: "Indicadores ao vivo de Moçambique. Números só aparecem se a API os devolver — nada é inventado. Meteorologia em Maputo, Beira, Nampula e Pemba.",
+    reload: "Actualizar tudo",
+    retry: "Tentar outra vez",
+    loading: "A carregar dados ao vivo…",
+    error: "Não foi possível carregar alguns dados. Usa «Tentar outra vez» no cartão ou actualiza tudo.",
     cardFail: "Não foi possível carregar este indicador.",
     pop: "População",
     capital: "Capital",
     area: "Área",
     gdp: "PIB",
     life: "Esperança de vida",
-    weather: "Meteorologia · Maputo",
     flag: "Bandeira",
     languages: "Línguas",
     currency: "Moeda",
     sourceWB: "Banco Mundial",
-    sourceRC: "Referência",
+    sourceRC: "REST Countries",
     sourceOM: "Open-Meteo",
     humidity: "Humidade",
     wind: "Vento",
-    year: "ano",
     km2: "km²",
     usd: "USD",
     years: "anos",
-    disclaimer: "Fontes ao vivo: <a href=\"https://data.worldbank.org/\" rel=\"noopener\">World Bank</a> (população, PIB, esperança de vida) e <a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a> (Maputo). Capital, área e bandeira são dados de referência — a API REST Countries foi descontinuada. Laboratório, não um produto oficial.",
+    billion: "mil milhões",
+    secCountry: "País",
+    secWeather: "Meteorologia",
+    wxCity: "Meteorologia",
+    updated: "actualizado",
+    maputo: "Maputo",
+    beira: "Beira",
+    nampula: "Nampula",
+    pemba: "Pemba",
+    sources: "<strong>Fontes</strong> (consultadas no teu browser, agora): <ul><li><a href=\"https://data.worldbank.org/country/mozambique\" rel=\"noopener\">Banco Mundial / World Development Indicators</a> — população, PIB, esperança de vida, área de superfície, capital</li><li><a href=\"https://restcountries.com/\" rel=\"noopener\">REST Countries</a> — línguas, moedas, bandeira e outros campos se a API pública responder</li><li><a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a> — meteorologia actual em Maputo, Beira, Nampula e Pemba (sem chave)</li></ul>Laboratório de Daniel Marcos, Maputo — não é um produto oficial nem de cliente.",
     w0: "Céu limpo", w1: "Principalmente limpo", w2: "Parcialmente nublado", w3: "Nublado",
     w45: "Nevoeiro", w48: "Nevoeiro com geada", w51: "Chuvisco fraco", w61: "Chuva fraca",
     w63: "Chuva", w65: "Chuva forte", w71: "Neve", w80: "Aguaceiros", w95: "Trovoada"
@@ -376,30 +381,38 @@ window.I18N = {
     code: "Code",
     labnote: "This is a lab, not a production product.",
     title: "MozStat",
-    lead: "Live Mozambique indicators: population, capital, GDP, life expectancy, and Maputo weather.",
-    reload: "Refresh data",
-    loading: "Loading…",
-    error: "Could not load some data. Try again.",
+    lead: "Live Mozambique indicators. Numbers appear only when an API returns them — nothing is invented. Weather for Maputo, Beira, Nampula and Pemba.",
+    reload: "Refresh all",
+    retry: "Try again",
+    loading: "Loading live data…",
+    error: "Some data could not be loaded. Use «Try again» on the card or refresh all.",
     cardFail: "Could not load this indicator.",
     pop: "Population",
     capital: "Capital",
     area: "Area",
     gdp: "GDP",
     life: "Life expectancy",
-    weather: "Weather · Maputo",
     flag: "Flag",
     languages: "Languages",
     currency: "Currency",
     sourceWB: "World Bank",
-    sourceRC: "Referência",
+    sourceRC: "REST Countries",
     sourceOM: "Open-Meteo",
     humidity: "Humidity",
     wind: "Wind",
-    year: "year",
     km2: "km²",
     usd: "USD",
     years: "years",
-    disclaimer: "Live sources: <a href=\"https://data.worldbank.org/\" rel=\"noopener\">World Bank</a> (population, GDP, life expectancy) and <a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a> (Maputo). Capital, area and flag are reference data — the REST Countries API was discontinued. A lab, not an official product.",
+    billion: "billion",
+    secCountry: "Country",
+    secWeather: "Weather",
+    wxCity: "Weather",
+    updated: "updated",
+    maputo: "Maputo",
+    beira: "Beira",
+    nampula: "Nampula",
+    pemba: "Pemba",
+    sources: "<strong>Sources</strong> (fetched in your browser, now): <ul><li><a href=\"https://data.worldbank.org/country/mozambique\" rel=\"noopener\">World Bank / World Development Indicators</a> — population, GDP, life expectancy, surface area, capital</li><li><a href=\"https://restcountries.com/\" rel=\"noopener\">REST Countries</a> — languages, currencies, flag and other fields if the public API responds</li><li><a href=\"https://open-meteo.com/\" rel=\"noopener\">Open-Meteo</a> — current weather in Maputo, Beira, Nampula and Pemba (no API key)</li></ul>A Daniel Marcos lab in Maputo — not an official or client product.",
     w0: "Clear sky", w1: "Mainly clear", w2: "Partly cloudy", w3: "Overcast",
     w45: "Fog", w48: "Rime fog", w51: "Light drizzle", w61: "Light rain",
     w63: "Rain", w65: "Heavy rain", w71: "Snow", w80: "Showers", w95: "Thunderstorm"
@@ -407,31 +420,55 @@ window.I18N = {
 };
 
 (function () {
+  var CITIES = [
+    { id: "maputo", lat: -25.9658, lon: 32.5832 },
+    { id: "beira", lat: -19.8333, lon: 34.8500 },
+    { id: "nampula", lat: -15.1167, lon: 39.2667 },
+    { id: "pemba", lat: -12.9736, lon: 40.5178 }
+  ];
+  var WB_LINK = {
+    pop: "https://data.worldbank.org/indicator/SP.POP.TOTL?locations=MZ",
+    gdp: "https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?locations=MZ",
+    life: "https://data.worldbank.org/indicator/SP.DYN.LE00.IN?locations=MZ",
+    area: "https://data.worldbank.org/indicator/AG.SRF.TOTL.K2?locations=MZ",
+    country: "https://data.worldbank.org/country/mozambique"
+  };
+  var RC_LINK = "https://restcountries.com/";
+  var OM_LINK = "https://open-meteo.com/";
+
   function t(k) {
     var l = dmGetLang();
     return (I18N[l] && I18N[l][k]) || I18N.pt[k] || k;
   }
   function locale() { return dmGetLang() === "en" ? "en-GB" : "pt-MZ"; }
   function num(n, maxFrac) {
-    if (n == null || !isFinite(n)) return "—";
+    if (n == null || !isFinite(n)) return null;
     return new Intl.NumberFormat(locale(), { maximumFractionDigits: maxFrac || 0 }).format(n);
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    });
+  }
+  function weatherText(code) {
+    var map = {0:"w0",1:"w1",2:"w2",3:"w3",45:"w45",48:"w48",51:"w51",53:"w51",55:"w51",61:"w61",63:"w63",65:"w65",71:"w71",80:"w80",81:"w80",82:"w80",95:"w95",96:"w95",99:"w95"};
+    return t(map[code] || "w2");
   }
   function wbLatest(json) {
     var rows = null;
-    if (Array.isArray(json)) rows = json[1];
-    else if (json && Array.isArray(json.data)) rows = json.data;
+    var updated = null;
+    if (Array.isArray(json)) {
+      if (json[0] && json[0].lastupdated) updated = json[0].lastupdated;
+      rows = json[1];
+    } else if (json && Array.isArray(json.data)) rows = json.data;
     if (!rows || !rows.length) return null;
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
       if (!row || row.value == null || row.value === "") continue;
       var v = Number(row.value);
-      if (isFinite(v)) return { value: v, date: row.date };
+      if (isFinite(v)) return { value: v, date: row.date, updated: updated };
     }
     return null;
-  }
-  function weatherText(code) {
-    var map = {0:"w0",1:"w1",2:"w2",3:"w3",45:"w45",48:"w48",51:"w51",53:"w51",55:"w51",61:"w61",63:"w63",65:"w65",71:"w71",80:"w80",81:"w80",82:"w80",95:"w95",96:"w95",99:"w95"};
-    return t(map[code] || "w2");
   }
   function parseRc(j) {
     if (!j) throw new Error("rc empty");
@@ -440,7 +477,7 @@ window.I18N = {
     var row = Array.isArray(j) ? j[0] : (j.data && j.data.objects && j.data.objects[0]) || j;
     if (!row || typeof row !== "object") throw new Error("rc shape");
     var name = row.name;
-    var hasName = typeof name === "string" ? name : (name && name.common);
+    var hasName = typeof name === "string" ? name : (name && (name.common || name.official));
     if (!hasName && !row.cca3 && !row.alpha3Code) throw new Error("rc shape");
     return row;
   }
@@ -467,9 +504,6 @@ window.I18N = {
     if (typeof capital === "string") capital = [capital];
     if (!Array.isArray(capital)) capital = [];
     var flags = row.flags || {};
-    if (!flags.svg && !flags.png) {
-      flags = { svg: "https://flagcdn.com/mz.svg", png: "https://flagcdn.com/w320/mz.png" };
-    }
     return {
       capital: capital,
       area: row.area,
@@ -500,122 +534,313 @@ window.I18N = {
       return p.catch(function () { return fetchJson(u); });
     }, Promise.reject(new Error("start")));
   }
-  var state = { loading: true, rc: null, pop: null, gdp: null, life: null, wx: null, errors: [] };
 
-  function hasErr(id) { return state.errors.indexOf(id) !== -1; }
+  var slots = {
+    pop: { loading: true, data: null, error: false },
+    gdp: { loading: true, data: null, error: false },
+    life: { loading: true, data: null, error: false },
+    area: { loading: true, data: null, error: false },
+    capital: { loading: true, data: null, error: false },
+    rc: { loading: true, data: null, error: false }
+  };
+  CITIES.forEach(function (c) {
+    slots["wx-" + c.id] = { loading: true, data: null, error: false };
+  });
 
-  function card(key, valueHtml, sub, extra, errId) {
-    var failed = !state.loading && errId && hasErr(errId) && (valueHtml === "—" || !valueHtml);
-    var subHtml = sub ? '<div class="s">' + sub + "</div>" : "";
-    if (failed) subHtml += '<div class="s danger">' + t("cardFail") + "</div>";
-    return '<article class="card stat"><div class="k">' + t(key) + '</div><div class="v">' +
-      (state.loading ? '<div class="skel"></div>' : valueHtml) + "</div>" +
-      subHtml + (extra || "") + "</article>";
+  function setSlot(id, patch) {
+    slots[id] = Object.assign({}, slots[id], patch);
+  }
+
+  function sourceLink(href, label) {
+    return '<a href="' + esc(href) + '" rel="noopener" target="_blank">' + esc(label) + "</a>";
+  }
+  function retryBtn(id) {
+    return '<button type="button" class="btn btn-sm" data-retry="' + esc(id) + '">' + esc(t("retry")) + "</button>";
+  }
+  function kpiSkeleton() {
+    return '<article class="kpi" aria-busy="true"><div class="skel skel-label"></div><div class="skel skel-value"></div><div class="skel skel-meta"></div></article>';
+  }
+  function kpiCard(opts) {
+    var loading = opts.loading;
+    var failed = opts.error || (!loading && (opts.valueHtml == null || opts.valueHtml === ""));
+    if (loading) return kpiSkeleton();
+    if (failed) {
+      return '<article class="kpi">' +
+        '<p class="kpi-label">' + esc(opts.label) + "</p>" +
+        '<p class="kpi-value muted">—</p>' +
+        '<p class="kpi-meta danger">' + esc(t("cardFail")) + "</p>" +
+        '<p class="kpi-meta">' + retryBtn(opts.retryId) + "</p>" +
+        "</article>";
+    }
+    var meta = [];
+    if (opts.sourceHtml) meta.push(opts.sourceHtml);
+    if (opts.time) {
+      var label = opts.timeLabel || opts.time;
+      meta.push("<time datetime=\"" + esc(opts.time) + "\">" + esc(t("updated") + " " + label) + "</time>");
+    }
+    if (opts.extra) meta.push("<span>" + opts.extra + "</span>");
+    return '<article class="kpi">' +
+      '<p class="kpi-label">' + esc(opts.label) + "</p>" +
+      '<p class="kpi-value' + (opts.small ? " small" : "") + '">' + opts.valueHtml + "</p>" +
+      (meta.length ? '<p class="kpi-meta">' + meta.join("") + "</p>" : "") +
+      "</article>";
   }
 
   function render() {
     var banners = document.getElementById("banners");
-    banners.innerHTML = "";
-    var nOk = [state.rc, state.pop, state.gdp, state.life, state.wx].filter(Boolean).length;
-    if (state.loading) {
-      banners.innerHTML = '<div class="banner">' + t("loading") + "</div>";
-    } else if (state.errors.length && !nOk) {
-      banners.innerHTML = '<div class="banner err">' + t("error") + "</div>";
+    var ids = Object.keys(slots);
+    var loadingN = ids.filter(function (k) { return slots[k].loading; }).length;
+    var errN = ids.filter(function (k) { return slots[k].error; }).length;
+    var okN = ids.filter(function (k) { return !slots[k].loading && !slots[k].error && slots[k].data; }).length;
+    if (loadingN) banners.innerHTML = '<div class="banner">' + esc(t("loading")) + "</div>";
+    else if (errN && !okN) banners.innerHTML = '<div class="banner err">' + esc(t("error")) + "</div>";
+    else if (errN) banners.innerHTML = '<div class="banner err">' + esc(t("error")) + "</div>";
+    else banners.innerHTML = "";
+
+    var rc = slots.rc.data;
+    var pop = slots.pop.data;
+    var gdp = slots.gdp.data;
+    var life = slots.life.data;
+    var areaWb = slots.area.data;
+    var capitalWb = slots.capital.data;
+
+    var popV = pop ? num(pop.value) : null;
+    var gdpV = null;
+    if (gdp) gdpV = esc(num(gdp.value / 1e9, 1) + " " + t("billion") + " " + t("usd"));
+    var lifeV = life ? esc(num(life.value, 1) + " " + t("years")) : null;
+
+    var cap = null;
+    if (rc && rc.capital && rc.capital[0]) cap = esc(rc.capital[0]);
+    else if (capitalWb) cap = esc(capitalWb);
+
+    var areaV = null;
+    var areaSrc = null;
+    var areaTime = null;
+    var areaTimeLabel = null;
+    if (rc && rc.area != null && isFinite(Number(rc.area))) {
+      areaV = esc(num(Number(rc.area)) + " " + t("km2"));
+      areaSrc = sourceLink(RC_LINK, t("sourceRC"));
+    } else if (areaWb) {
+      areaV = esc(num(areaWb.value) + " " + t("km2"));
+      areaSrc = sourceLink(WB_LINK.area, t("sourceWB"));
+      areaTime = areaWb.updated || areaWb.date;
+      areaTimeLabel = areaWb.date || areaWb.updated;
     }
-    var g = document.getElementById("grid");
-    var popV = state.pop ? num(state.pop.value) : "—";
-    var popS = state.pop ? t("sourceWB") + " · " + state.pop.date : t("sourceWB");
-    var cap = (state.rc && state.rc.capital && state.rc.capital[0]) || "—";
-    var area = state.rc && state.rc.area != null ? num(state.rc.area) + " " + t("km2") : "—";
-    var langs = state.rc && state.rc.languages ? Object.values(state.rc.languages).join(", ") : "—";
-    var cur = "—";
-    if (state.rc && state.rc.currencies) {
-      cur = Object.keys(state.rc.currencies).map(function (c) {
-        var x = state.rc.currencies[c];
+
+    var langs = null;
+    if (rc && rc.languages && Object.keys(rc.languages).length) {
+      langs = esc(Object.values(rc.languages).filter(Boolean).join(", "));
+    }
+    var cur = null;
+    if (rc && rc.currencies && Object.keys(rc.currencies).length) {
+      cur = esc(Object.keys(rc.currencies).map(function (c) {
+        var x = rc.currencies[c];
         return (x && x.symbol ? x.symbol + " " : "") + ((x && x.name) || c) + " (" + c + ")";
-      }).join(", ");
+      }).join(", "));
     }
-    var gdpV = state.gdp ? num(state.gdp.value / 1e9, 1) + " mil milhões " + t("usd") : "—";
-    if (dmGetLang() === "en" && state.gdp) gdpV = num(state.gdp.value / 1e9, 1) + " billion " + t("usd");
-    var gdpS = state.gdp ? t("sourceWB") + " · " + state.gdp.date : t("sourceWB");
-    var lifeV = state.life ? num(state.life.value, 1) + " " + t("years") : "—";
-    var lifeS = state.life ? t("sourceWB") + " · " + state.life.date : t("sourceWB");
-    var wxV = "—", wxS = t("sourceOM");
-    if (state.wx && state.wx.current) {
-      var c = state.wx.current;
-      wxV = num(c.temperature_2m, 1) + " °C · " + weatherText(c.weather_code);
-      wxS = t("humidity") + " " + c.relative_humidity_2m + "% · " + t("wind") + " " + num(c.wind_speed_10m, 0) + " km/h · " + t("sourceOM");
+    var flagHtml = null;
+    if (rc && rc.flags && (rc.flags.svg || rc.flags.png)) {
+      flagHtml = '<img class="flag" alt="' + esc(t("flag")) + '" src="' + esc(rc.flags.svg || rc.flags.png) + '" />';
     }
-    var flag = "";
-    if (state.rc && state.rc.flags && (state.rc.flags.svg || state.rc.flags.png)) {
-      flag = '<img class="flag" alt="' + t("flag") + '" src="' + (state.rc.flags.svg || state.rc.flags.png) + '" />';
+
+    var country = "";
+    country += kpiCard({
+      loading: slots.pop.loading, error: slots.pop.error, retryId: "pop",
+      label: t("pop"), valueHtml: popV ? esc(popV) : null,
+      sourceHtml: sourceLink(WB_LINK.pop, t("sourceWB")),
+      time: pop && (pop.updated || pop.date),
+      timeLabel: pop && (pop.date || pop.updated)
+    });
+    var capLoading = !cap && (slots.rc.loading || slots.capital.loading);
+    var capFromRc = rc && rc.capital && rc.capital[0];
+    country += kpiCard({
+      loading: capLoading,
+      error: !cap && !slots.rc.loading && !slots.capital.loading,
+      retryId: "capital",
+      label: t("capital"),
+      valueHtml: cap,
+      sourceHtml: capFromRc ? sourceLink(RC_LINK, t("sourceRC")) : sourceLink(WB_LINK.country, t("sourceWB"))
+    });
+    var areaLoading = !areaV && (slots.rc.loading || slots.area.loading);
+    country += kpiCard({
+      loading: areaLoading,
+      error: !areaV && !slots.rc.loading && !slots.area.loading,
+      retryId: "area",
+      label: t("area"),
+      valueHtml: areaV,
+      sourceHtml: areaSrc,
+      time: areaTime,
+      timeLabel: areaTimeLabel
+    });
+    country += kpiCard({
+      loading: slots.gdp.loading, error: slots.gdp.error, retryId: "gdp",
+      label: t("gdp"), valueHtml: gdpV,
+      sourceHtml: sourceLink(WB_LINK.gdp, t("sourceWB")),
+      time: gdp && (gdp.updated || gdp.date),
+      timeLabel: gdp && (gdp.date || gdp.updated)
+    });
+    country += kpiCard({
+      loading: slots.life.loading, error: slots.life.error, retryId: "life",
+      label: t("life"), valueHtml: lifeV,
+      sourceHtml: sourceLink(WB_LINK.life, t("sourceWB")),
+      time: life && (life.updated || life.date),
+      timeLabel: life && (life.date || life.updated)
+    });
+    if (slots.rc.loading || langs || slots.rc.error) {
+      country += kpiCard({
+        loading: slots.rc.loading, error: slots.rc.error && !langs, retryId: "rc",
+        label: t("languages"), valueHtml: langs, small: true,
+        sourceHtml: sourceLink(RC_LINK, t("sourceRC"))
+      });
     }
-    g.innerHTML =
-      card("pop", popV, popS, "", "SP.POP.TOTL") +
-      card("capital", cap, t("sourceRC") + " · " + t("languages") + ": " + langs, "", "rc") +
-      card("area", area, t("sourceRC") + " · " + t("currency") + ": " + cur, "", "rc") +
-      card("gdp", gdpV, gdpS, "", "NY.GDP.MKTP.CD") +
-      card("life", lifeV, lifeS, "", "SP.DYN.LE00.IN") +
-      card("weather", wxV, wxS, "", "wx") +
-      card("flag", flag || "—", t("sourceRC"), "", "rc");
+    if (slots.rc.loading || cur || slots.rc.error) {
+      country += kpiCard({
+        loading: slots.rc.loading, error: slots.rc.error && !cur, retryId: "rc",
+        label: t("currency"), valueHtml: cur, small: true,
+        sourceHtml: sourceLink(RC_LINK, t("sourceRC"))
+      });
+    }
+    if (slots.rc.loading || flagHtml || slots.rc.error) {
+      country += kpiCard({
+        loading: slots.rc.loading, error: slots.rc.error && !flagHtml, retryId: "rc",
+        label: t("flag"), valueHtml: flagHtml,
+        sourceHtml: sourceLink(RC_LINK, t("sourceRC"))
+      });
+    }
+    document.getElementById("grid-country").innerHTML = country;
+
+    var wxHtml = "";
+    CITIES.forEach(function (c) {
+      var id = "wx-" + c.id;
+      var slot = slots[id];
+      var value = null;
+      var extra = null;
+      var time = null;
+      var timeLabel = null;
+      if (slot.data && slot.data.current) {
+        var curw = slot.data.current;
+        value = esc(num(curw.temperature_2m, 1) + " °C");
+        extra = esc(weatherText(curw.weather_code) + " · " + t("humidity") + " " + curw.relative_humidity_2m + "% · " + t("wind") + " " + num(curw.wind_speed_10m, 0) + " km/h");
+        if (curw.time) {
+          time = curw.time;
+          try {
+            timeLabel = new Date(curw.time).toLocaleString(locale(), { timeZone: "Africa/Maputo", hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short" });
+          } catch (e) { timeLabel = curw.time; }
+        }
+      }
+      wxHtml += kpiCard({
+        loading: slot.loading, error: slot.error, retryId: id,
+        label: t(c.id),
+        valueHtml: value,
+        sourceHtml: sourceLink(OM_LINK, t("sourceOM")),
+        time: time,
+        timeLabel: timeLabel,
+        extra: extra
+      });
+    });
+    document.getElementById("grid-weather").innerHTML = wxHtml;
   }
 
-  async function load() {
-    state.loading = true;
-    state.errors = [];
-    state.rc = state.pop = state.gdp = state.life = state.wx = null;
+  function loadWb(code, slotId) {
+    setSlot(slotId, { loading: true, error: false, data: null });
     render();
-    function fail(label) { if (state.errors.indexOf(label) === -1) state.errors.push(label); return null; }
-    function wb(code) {
-      var urls = [
-        "https://api.worldbank.org/v2/country/MOZ/indicator/" + code + "?format=json&mrnev=1&per_page=8",
-        "https://api.worldbank.org/v2/country/MOZ/indicator/" + code + "?format=json&per_page=20"
-      ];
-      return urls.reduce(function (p, u) {
-        return p.catch(function () {
-          return fetchJson(u).then(wbLatest).then(function (row) {
-            if (!row) throw new Error("wb empty");
-            return row;
-          });
-        });
-      }, Promise.reject(new Error("start"))).catch(function () { return fail(code); });
-    }
-    function staticMoz() {
-      return {
-        capital: ["Maputo"],
-        area: 801590,
-        languages: { por: "Português" },
-        currencies: { MZN: { name: "Metical moçambicano", symbol: "MT" } },
-        flags: { svg: "https://flagcdn.com/mz.svg", png: "https://flagcdn.com/w320/mz.png" }
-      };
-    }
-    function fetchRc() {
-      return Promise.resolve(staticMoz());
-    }
-    var wxUrl = "https://api.open-meteo.com/v1/forecast?latitude=-25.97&longitude=32.57&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Africa%2FMaputo";
-    const jobs = [
-      fetchRc().catch(function () { return fail("rc"); }),
-      wb("SP.POP.TOTL"),
-      wb("NY.GDP.MKTP.CD"),
-      wb("SP.DYN.LE00.IN"),
-      fetchJson(wxUrl, 12000).then(function (j) {
-        if (!j || !j.current) throw new Error("wx shape");
-        return j;
-      }).catch(function () { return fail("wx"); })
+    var urls = [
+      "https://api.worldbank.org/v2/country/MOZ/indicator/" + code + "?format=json&mrnev=1&per_page=8",
+      "https://api.worldbank.org/v2/country/MOZ/indicator/" + code + "?format=json&per_page=20"
     ];
-    const out = await Promise.all(jobs);
-    state.rc = out[0];
-    state.pop = out[1];
-    state.gdp = out[2];
-    state.life = out[3];
-    state.wx = out[4];
-    state.loading = false;
-    render();
+    return urls.reduce(function (p, u) {
+      return p.catch(function () {
+        return fetchJson(u).then(wbLatest).then(function (row) {
+          if (!row) throw new Error("wb empty");
+          return row;
+        });
+      });
+    }, Promise.reject(new Error("start"))).then(function (row) {
+      setSlot(slotId, { loading: false, error: false, data: row });
+    }).catch(function () {
+      setSlot(slotId, { loading: false, error: true, data: null });
+    }).then(render);
   }
 
+  function loadCapital() {
+    setSlot("capital", { loading: true, error: false, data: null });
+    render();
+    return fetchJsonFirst(corsFallbacks("https://api.worldbank.org/v2/country/MOZ?format=json")).then(function (j) {
+      var row = Array.isArray(j) ? j[1] && j[1][0] : null;
+      var cap = row && row.capitalCity;
+      if (!cap) throw new Error("no capital");
+      setSlot("capital", { loading: false, error: false, data: cap });
+    }).catch(function () {
+      setSlot("capital", { loading: false, error: true, data: null });
+    }).then(render);
+  }
+
+  function loadRc() {
+    setSlot("rc", { loading: true, error: false, data: null });
+    render();
+    var urls = corsFallbacks("https://restcountries.com/v3.1/alpha/MOZ").concat(
+      corsFallbacks("https://restcountries.com/v3.1/name/mozambique?fullText=true")
+    );
+    return fetchJsonFirst(urls).then(function (j) {
+      var row = parseRc(j);
+      var norm = normalizeRc(row);
+      if (!norm) throw new Error("rc empty");
+      setSlot("rc", { loading: false, error: false, data: norm });
+    }).catch(function () {
+      setSlot("rc", { loading: false, error: true, data: null });
+    }).then(render);
+  }
+
+  function loadWx(city) {
+    var id = "wx-" + city.id;
+    setSlot(id, { loading: true, error: false, data: null });
+    render();
+    var url = "https://api.open-meteo.com/v1/forecast?latitude=" + city.lat +
+      "&longitude=" + city.lon +
+      "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Africa%2FMaputo";
+    return fetchJson(url, 12000).then(function (j) {
+      if (!j || !j.current) throw new Error("wx shape");
+      setSlot(id, { loading: false, error: false, data: j });
+    }).catch(function () {
+      setSlot(id, { loading: false, error: true, data: null });
+    }).then(render);
+  }
+
+  function loadAll() {
+    loadWb("SP.POP.TOTL", "pop");
+    loadWb("NY.GDP.MKTP.CD", "gdp");
+    loadWb("SP.DYN.LE00.IN", "life");
+    loadWb("AG.SRF.TOTL.K2", "area");
+    loadCapital();
+    loadRc();
+    CITIES.forEach(loadWx);
+  }
+
+  function retry(id) {
+    if (id === "pop") return loadWb("SP.POP.TOTL", "pop");
+    if (id === "gdp") return loadWb("NY.GDP.MKTP.CD", "gdp");
+    if (id === "life") return loadWb("SP.DYN.LE00.IN", "life");
+    if (id === "area") return Promise.all([loadWb("AG.SRF.TOTL.K2", "area"), loadRc()]);
+    if (id === "capital") return Promise.all([loadCapital(), loadRc()]);
+    if (id === "rc") return loadRc();
+    if (id.indexOf("wx-") === 0) {
+      var cityId = id.slice(3);
+      var city = CITIES.filter(function (c) { return c.id === cityId; })[0];
+      if (city) return loadWx(city);
+    }
+  }
+
+  document.getElementById("grid-country").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-retry]");
+    if (b) retry(b.getAttribute("data-retry"));
+  });
+  document.getElementById("grid-weather").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-retry]");
+    if (b) retry(b.getAttribute("data-retry"));
+  });
   window.onLangChange = function () { render(); };
-  document.getElementById("reload").addEventListener("click", load);
-  load();
+  document.getElementById("reload").addEventListener("click", loadAll);
+  loadAll();
 })();
     dmSetLang(dmGetLang());
   </script>
